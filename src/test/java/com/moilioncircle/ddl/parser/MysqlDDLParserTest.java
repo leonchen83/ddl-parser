@@ -27,8 +27,7 @@ public class MysqlDDLParserTest {
         try(Reader reader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("test.sql"))){
             List<TableElement> tables = new MysqlDDLParser().parse(reader);
             tables.forEach(System.out::println);
-            assertEquals(tables.size(),5);
+            assertEquals(tables.size(),4);
         }
-
     }
 }

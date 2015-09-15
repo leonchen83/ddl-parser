@@ -10,8 +10,6 @@ CREATE TABLE `conf` (
 
 create table conf_temp like conf;
 
-drop table `conf`;
-
 CREATE TABLE `item_brand` (
   `item_url` varchar(255) NOT NULL,
   `brand_url` varchar(255) NOT NULL,
@@ -21,6 +19,8 @@ CREATE TABLE `item_brand` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 create table item_brand_daily like item_brand;
+
+drop table `conf`,`item_brand`;
 
 CREATE TABLE `tag` (
   `tag_id` int NOT NULL COMMENT 'GID("TAG_ID")',
