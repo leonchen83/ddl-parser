@@ -55,4 +55,25 @@ try(Reader reader = new InputStreamReader(this.getClass().getClassLoader().getRe
 }
 ```
 
-More details please see `MysqlDDLParserTest`  
+Output
+```
+TableInfo:
+ tableName=conf_temp
+ pks=[conf_key, conf_type]
+ columns=[[columnName=conf_key, type=INT], [columnName=conf_type, type=INT], [columnName=conf_value, type=TEXT], [columnName=return_type, type=INT], [columnName=createddt, type=TIMESTAMP], [columnName=updateddt, type=TIMESTAMP]]
+TableInfo:
+ tableName=item_brand_daily
+ pks=[item_url]
+ columns=[[columnName=item_url, type=VARCHAR], [columnName=brand_url, type=VARCHAR], [columnName=brand_name, type=VARCHAR], [columnName=item_id, type=BIGINT]]
+TableInfo:
+ tableName=tag
+ pks=[tag_id]
+ columns=[[columnName=tag_id, type=INT], [columnName=tag_name, type=VARCHAR], [columnName=tag_type, type=INT], [columnName=createddt, type=TIMESTAMP], [columnName=updateddt, type=TIMESTAMP]]
+TableInfo:
+ tableName=tag_temp
+ pks=[tag_id]
+ columns=[[columnName=tag_id, type=INT], [columnName=tag_name, type=VARCHAR], [columnName=tag_type, type=INT], [columnName=updateddt, type=TIMESTAMP], [columnName=tag_parent, type=INT]]
+
+```
+
+More details please see `MysqlDDLParserTest`
