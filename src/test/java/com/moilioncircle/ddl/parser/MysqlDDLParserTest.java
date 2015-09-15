@@ -2,6 +2,7 @@ package com.moilioncircle.ddl.parser;
 
 import org.testng.annotations.Test;
 
+import java.io.*;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
@@ -19,5 +20,15 @@ public class MysqlDDLParserTest {
         assertEquals(tables.get(0).getTableName().getValue(),"nb_category_extra");
         assertEquals(tables.get(0).getPks().get(0).getValue(), "category_id");
         assertEquals(tables.get(0).getColumns().size(), 3);
+    }
+
+    @Test
+    public void testParse1() throws Exception {
+        try(Reader reader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("test.sql"))){
+            List<TableElement> tables = new MysqlDDLParser().parse(reader);
+            tables.forEach(System.out::println);
+            assertEquals(tables.size(),5);
+        }
+
     }
 }

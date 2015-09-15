@@ -5,9 +5,13 @@ import com.moilioncircle.ddl.parser.utils.IToken;
 import com.moilioncircle.ddl.parser.utils.MySqlToken;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * support create table,drop table
@@ -18,21 +22,25 @@ public class MysqlDDLParser {
     private IToken token;
     private ISymbol currentSymbol;
 
-    private List<TableElement> tables = new ArrayList<>();
+    private List<TableElement> tables;
     private TableElement currentTable;
     private TableElement needAlterTable;
 
-    public List<TableElement> parse(String str) throws IOException {
+    public List<TableElement> parse(Reader reader) throws IOException {
         //init
-        this.token = new MySqlToken(new StringReader(str));
+        this.token = new MySqlToken(reader);
         if (token.hasNext()) {
             currentSymbol = token.nextToken();
         }
-        tables = new ArrayList<>();
+        tables = new CopyOnWriteArrayList<>();
         currentTable = null;
         needAlterTable = null;
         ddls();
         return tables;
+    }
+
+    public List<TableElement> parse(String str) throws IOException {
+        return parse(new StringReader(str));
     }
 
     private void ddls() {
@@ -1649,7 +1657,9 @@ public class MysqlDDLParser {
                 isTemporary();
                 match("TABLE");
                 isIfExists();
-                names();
+                List<ISymbol> tableNames = names();
+                List<TableElement> removeTables = tableNames.stream().map(this::lookup).collect(Collectors.toList());
+                tables.removeAll(removeTables);
                 isReferenceOptionExtra();
                 break;
             default:
@@ -1658,24 +1668,27 @@ public class MysqlDDLParser {
         }
     }
 
-    private void names() {
+    private List<ISymbol> names() {
+        List<ISymbol> list = new CopyOnWriteArrayList<>();
         ISymbol tok = currentToken();
         switch (tok.getTypeName()) {
             case "FIELD":
-                name();
-                namesTail();
+                list.add(name());
+                list.addAll(namesTail());
                 break;
             case "ID":
-                name();
-                namesTail();
+                list.add(name());
+                list.addAll(namesTail());
                 break;
             default:
                 syntaxError(tok.getTypeName());
                 break;
         }
+        return list;
     }
 
-    private void namesTail() {
+    private List<ISymbol> namesTail() {
+        List<ISymbol> list = new CopyOnWriteArrayList<>();
         ISymbol tok = currentToken();
         switch (tok.getTypeName()) {
             case "":
@@ -1683,12 +1696,13 @@ public class MysqlDDLParser {
                 break;
             case "COMMA":
                 match("COMMA");
-                names();
+                list.addAll(names());
                 break;
             default:
                 syntaxError(tok.getTypeName());
                 break;
         }
+        return list;
     }
 
     private void isIfExists() {

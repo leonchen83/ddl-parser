@@ -4,12 +4,13 @@ import com.moilioncircle.ddl.parser.utils.ISymbol;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class TableElement {
     private ISymbol tableName;
-    private List<ISymbol> pks = new ArrayList<>();
-    private List<ColumnElement> columns = new ArrayList<>();
+    private List<ISymbol> pks = new CopyOnWriteArrayList<>();
+    private List<ColumnElement> columns = new CopyOnWriteArrayList<>();
 
     public ISymbol getTableName() {
         return tableName;
