@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="moilioncircle" verbose="1">
+    <test name="moilioncircle.ddl.parser">
+        <classes>
+            <class name="com.moilioncircle.ddl.parser.MysqlDDLParser"></class>
+        </classes>
+    </test>
+</suite>
