@@ -54,3 +54,5 @@ try(Reader reader = new InputStreamReader(this.getClass().getClassLoader().getRe
     tables.forEach(System.out::println);
 }
 ```
+
+More details please see `MysqlDDLParserTest`  
